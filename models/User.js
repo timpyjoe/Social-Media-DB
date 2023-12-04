@@ -13,7 +13,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-      match: "^[A-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[A-Z0-9.-]+$"
+      match: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
     },
     thoughts: [{
       type: mongoose.Schema.Types.ObjectId,
