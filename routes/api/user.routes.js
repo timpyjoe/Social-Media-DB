@@ -31,12 +31,27 @@ router.post("/" , async (req, res) => {
 
 router.post("/:userID/friends/:friendID", async (req, res) => {
   try {
-    const payload = await Model.findByIdAndUpdate(req.params.userID, friends.push(req.params.friendID))
+    const friendObject = await Model.findById(req.params.userID, {'friends':1, "_id":0})
+    friendObject.friends.push(req.params.friendID)
+    const payload = await Model.findByIdAndUpdate(req.params.userID, {friends: friendObject.friends})
     res.status(200).json({ result: "success", payload })
   } catch (err) {
     res.status(500).json({ result: "error", payload: err.message})
   }
 })
+
+router.delete("/:userID/friends/:friendID", async (req, res) => {
+  try {
+    const friendObject = await Model.findById(req.params.userID, {'friends':1, "_id":0})
+    const index = friendObject.friends.indexOf(req.params.friendID)
+    friendObject.friends.splice(index, 1)
+    const payload = await Model.findByIdAndUpdate(req.params.userID, {friends: friendObject.friends})
+    res.status(200).json({ result: "success", payload })
+  } catch (err) {
+    res.status(500).json({ result: "error", payload: err.message})
+  }
+})
+
 
 router.put("/:id", async (req, res) => {
   try {
